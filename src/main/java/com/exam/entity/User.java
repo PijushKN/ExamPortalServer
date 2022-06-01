@@ -1,10 +1,18 @@
 package com.exam.entity;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "users")
@@ -21,6 +29,9 @@ public class User {
 	private String phone;
 	private boolean enabled = true;
 	private String profile;
+	@OneToMany(cascade=CascadeType.ALL,fetch=FetchType.EAGER,mappedBy="user")
+	@JsonIgnore
+	private Set<UserRole> userRoles = new HashSet<>();
 
 	public User() {
 		super();
@@ -111,6 +122,15 @@ public class User {
 
 	public void setProfile(String profile) {
 		this.profile = profile;
+	}
+	
+
+	public Set<UserRole> getUserRoles() {
+		return userRoles;
+	}
+
+	public void setUserRoles(Set<UserRole> userRoles) {
+		this.userRoles = userRoles;
 	}
 
 	@Override
