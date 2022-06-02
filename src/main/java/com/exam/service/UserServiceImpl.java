@@ -1,5 +1,7 @@
 package com.exam.service;
 
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +23,6 @@ public class UserServiceImpl implements UserService {
 	public User createUser(User user, Set<UserRole> userRoles) throws Exception {
 		User receivedUser = userRepository.findByUsername(user.getUsername());
 		if (receivedUser != null) {
-			System.out.println("User Already Exists");
 			throw new Exception("User Already Exists");
 		} else {
 			for (UserRole userRole : userRoles) {
@@ -32,4 +33,26 @@ public class UserServiceImpl implements UserService {
 		}
 		return receivedUser;
 	}
+	
+	// Getting User
+	
+	public User getUser(String username) throws Exception{
+		User receivedUser = userRepository.findByUsername(username);
+		if(receivedUser==null) {
+			throw new Exception("User Not Found");
+		}
+		
+		return receivedUser;
+		
+	}
+
+	@Override
+	public User deleteUser(Long id) throws NoSuchElementException {
+		User user = userRepository.findById(id).get();
+		userRepository.deleteById(id);
+		return user;
+		
+	}
+	
+	
 }
